@@ -104,7 +104,7 @@ describe("createUser", () => {
   });
 });
 
-// Test when update a user
+// Test when update a user into database
 describe("updateUser", () => {
   afterEach(() => {
     jest.resetAllMocks();
