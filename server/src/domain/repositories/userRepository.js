@@ -20,6 +20,7 @@ async function createUser(userData) {
     [userData.name, userData.email]
   );
 
+  // Throw error and end connection
   if (existingUsers.length > 0) {
     await connection.end();
     throw new Error("User already exists");
