@@ -14,6 +14,17 @@ const configUserDB = {
 async function createUser(userData) {
   const connection = await mysql.createConnection(configUserDB);
 
+  // Check if the user exist before create it
+  const [existingUsers] = await connection.execute(
+    "SELECT * FROM users WHERE username = ? OR user_email = ?",
+    [userData.name, userData.email]
+  );
+
+  if (existingUsers.length > 0) {
+    await connection.end();
+    throw new Error("User already exists");
+  }
+  // Create new user into Database
   await connection.execute(
     "INSERT INTO users (username, user_email, user_password,create_at) VALUES (?, ?, ?, ?)",
     [userData.name, userData.email, userData.password, userData.createAt]
@@ -28,6 +39,7 @@ async function createUser(userData) {
     userData.createAt
   );
 }
+
 // Update a User
 async function updateUser(userId, userData) {
   const connection = await mysql.createConnection(configUserDB);
