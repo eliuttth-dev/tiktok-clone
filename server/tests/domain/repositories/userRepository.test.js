@@ -8,6 +8,14 @@ const config = require("../../../src/config");
 
 jest.mock("mysql2/promise");
 
+const configUserDB = {
+  host: config.database.host,
+  user: config.database.user,
+  password: config.database.password,
+  database: config.database.userDb,
+  port: config.database.port,
+};
+
 // Test when create a new user
 describe("createUser", () => {
   afterEach(() => {
@@ -31,13 +39,7 @@ describe("createUser", () => {
 
     const result = await createUser(userData);
 
-    expect(mysql.createConnection).toHaveBeenCalledWith({
-      host: config.database.host,
-      user: config.database.user,
-      password: config.database.password,
-      database: config.database.userDb,
-      port: config.database.port,
-    });
+    expect(mysql.createConnection).toHaveBeenCalledWith(configUserDB);
 
     expect(connectionMock.execute).toHaveBeenCalledWith(
       "INSERT INTO users (username, user_email, user_password,create_at) VALUES (?, ?, ?, ?)",
@@ -77,13 +79,7 @@ describe("updateUser", () => {
 
     const result = await updateUser(userId, userData);
 
-    expect(mysql.createConnection).toHaveBeenCalledWith({
-      host: config.database.host,
-      user: config.database.user,
-      password: config.database.password,
-      database: config.database.userDb,
-      port: config.database.port,
-    });
+    expect(mysql.createConnection).toHaveBeenCalledWith(configUserDB);
 
     expect(connectionMock.execute).toHaveBeenCalledWith(
       "UPDATE users SET username = ?, user_email = ?, user_password = ? WHERE id = ?",
